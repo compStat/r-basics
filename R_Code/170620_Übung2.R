@@ -56,16 +56,44 @@ titanic %>%
 
 # 6. 
 ## a) Erstelle Variable 'alone'
-titanic %>%
+titanic <- titanic %>%
   mutate(alone = ifelse(sibsp + parch == 0, 1, 0))
 
-## b) Minimum für 'Alleinreisende'
+## b) Minimum für 'Alleinreisende' für age
+titanic %>%
+  group_by(alone) %>%
+  summarise(minAge = min(age, na.rm = TRUE))
+
 ## c) Filter zur Auswahl des unteren 25% Quantils nach Alter. 
 ##    Anteilswert nach 'survived'
+titanic %>%
+  filter(
+    alone == 1,
+    age < quantile(age, probs = 0.25, na.rm = TRUE)
+  ) %>%
+  summarise(propSurvived = mean(survived))
 
 # 7. 
 ## a) 25% + 75% Quantil, Median, Mittelwert nach 'survived'
+titanic %>%
+  group_by(survived) %>%
+  summarise(
+    quantile25 = quantile(fare, probs = 0.25, na.rm = TRUE),
+    quantile50 = quantile(fare, probs = 0.50, na.rm = TRUE),
+    quantile75 = quantile(fare, probs = 0.75, na.rm = TRUE)
+  )
+
 ## b) wie oben, zusätzlich nach Klasse
+
+
+
+
+
+
+
+
+
+
 
 
 
